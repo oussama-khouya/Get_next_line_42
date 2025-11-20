@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okhouya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 11:19:11 by okhouya           #+#    #+#             */
-/*   Updated: 2025/11/18 11:19:14 by okhouya          ###   ########.fr       */
+/*   Created: 2025/11/20 17:57:23 by okhouya           #+#    #+#             */
+/*   Updated: 2025/11/20 17:57:25 by okhouya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-int	ft_strlen_gnl(char *s)
+int	ft_strlen_gnl_bonus(char *s)
 {
 	int	i;
 
@@ -24,7 +24,7 @@ int	ft_strlen_gnl(char *s)
 	return (i);
 }
 
-char	*ft_strchr_gnl(char *s, int c)
+char	*ft_strchr_gnl_bonus(char *s, int c)
 {
 	int	i;
 
@@ -42,13 +42,13 @@ char	*ft_strchr_gnl(char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin_gnl(char *s1, char *s2)
+char	*ft_strjoin_gnl_bonus(char *s1, char *s2)
 {
 	char	*res;
 	int		i;
 	int		j;
 
-	res = malloc(ft_strlen_gnl(s1) + ft_strlen_gnl(s2) + 1);
+	res = malloc(ft_strlen_gnl_bonus(s1) + ft_strlen_gnl_bonus(s2) + 1);
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -66,17 +66,17 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	return (res);
 }
 
-char	*ft_substr_gnl(char *s, int start, int len)
+char	*ft_substr_gnl_bonus(char *s, int start, int len)
 {
 	char	*res;
 	int		i;
 
 	if (!s)
 		return (NULL);
-	if (start >= ft_strlen_gnl(s))
+	if (start >= ft_strlen_gnl_bonus(s))
 		return (NULL);
-	if (len > ft_strlen_gnl(s) - start)
-		len = ft_strlen_gnl(s) - start;
+	if (len > ft_strlen_gnl_bonus(s) - start)
+		len = ft_strlen_gnl_bonus(s) - start;
 	res = malloc(len + 1);
 	if (!res)
 		return (NULL);

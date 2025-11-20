@@ -1,81 +1,113 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: okhouya <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/17 21:08:11 by okhouya           #+#    #+#             */
+/*   Updated: 2025/11/17 21:18:16 by okhouya          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
-#endif
-
-static char	*read_until_newline(int fd, char *stash)
+static char	*read_till_newline(int fd, char *keeper)
 {
-	char	*buf;
 	int		bytes;
+	char	*buffer;
 
+	buffer = malloc(BUFFER_SIZE + 1);
 	bytes = 1;
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf)
-		return (NULL);
-	while (!ft_strchr_gnl(stash, '\n') && bytes > 0)
+	while (!ft_strchr_gnl(keeper, '\n') && bytes > 0)
 	{
-		bytes = read(fd, buf, BUFFER_SIZE);
+		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
 		{
-			free(buf);
-			free(stash);
+			free(buffer);
 			return (NULL);
 		}
-		buf[bytes] = '\0';
-		stash = ft_strjoin_gnl(stash, buf);
+		buffer[bytes] = '\0';
+		keeper = ft_strjoin_gnl(keeper, buffer);
 	}
-	free(buf);
-	return (stash);
+	free(buffer);
+	return (keeper);
 }
 
-static char	*extract_line(char *stash)
+static char	*extract_line(char *keeper)
 {
-	int		len;
+	int		i;
 	char	*line;
 
-	if (!stash || !stash[0])
-		return (NULL);
-	len = 0;
-	while (stash[len] && stash[len] != '\n')
-		len++;
-	if (stash[len] == '\n')
-		len++;
-	line = ft_substr_gnl(stash, 0, len);
+	i = 0;
+	while (keeper[i] && keeper[i] != '\n')
+		i++;
+	if (keeper[i] == '\n')
+		i++;
+	line = ft_substr_gnl(keeper, 0, i);
 	return (line);
 }
 
-static char	*update_stash(char *stash)
+static char	*update_keeper(char *keeper)
 {
 	int		i;
-	char	*newstash;
+	char	*new_keeper;
 
-	if (!stash)
-		return (NULL);
 	i = 0;
-	while (stash[i] && stash[i] != '\n')
+	while (keeper[i] && keeper[i] != '\n')
 		i++;
-	if (!stash[i])
+	if (!keeper[i])
 	{
-		free(stash);
+		free(keeper);
 		return (NULL);
 	}
-	newstash = ft_substr_gnl(stash, i + 1, ft_strlen_gnl(stash) - i - 1);
-	free(stash);
-	return (newstash);
+	if (keeper[i] == '\n')
+		i++;
+	new_keeper = ft_substr_gnl(keeper, i, ft_strlen_gnl(keeper) - i);
+	free(keeper);
+	return (new_keeper);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	char static	*keeper;
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash = read_until_newline(fd, stash);
-	if (!stash)
+	keeper = read_till_newline(fd, keeper);
+	if (!keeper)
 		return (NULL);
-	line = extract_line(stash);
-	stash = update_stash(stash);
+	line = extract_line(keeper);
+	keeper = update_keeper(keeper);
 	return (line);
 }
+// #include <fcntl.h>
+// #include <stdio.h>
+// int	main()
+// {
+// // 	int	fd;
+// // 	// char *keeper = NULL;
+// // 	// char *result;
+//  	char *line;
+// // 	// char *new_keeper;
+
+// // 	fd = open("test.txt", O_RDONLY);
+// // 	// result = read_till_newline(fd,keeper);
+// // 	// line = extract_line(result);
+// // 	// new_keeper = update_keeper(result);
+
+// int fd3 = open("test3.txt", O_RDWR);
+// int fd4 = open("test4.txt", O_RDWR);
+// int fd5 = open("test5.txt", O_RDWR);
+
+// line = get_next_line(fd3);
+// printf("%s", line);
+
+// line = get_next_line(fd4);
+// printf("%s", line);
+
+// line = get_next_line(fd3);
+// printf("%s", line);
+
+// }
